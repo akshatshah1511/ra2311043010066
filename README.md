@@ -1,4 +1,14 @@
 # RA2311043010066
+Preview of the Assigned Task :
+
+Logger Output :
+<img width="701" height="807" alt="Screenshot 2026-05-02 at 12 37 33 PM" src="https://github.com/user-attachments/assets/b835b60c-58f8-45e5-a951-72ea3c61396f" />
+
+First Ouput
+<img width="698" height="782" alt="Screenshot 2026-05-02 at 12 37 07 PM" src="https://github.com/user-attachments/assets/56abee05-24cc-45e4-85a4-21a286120e5f" />
+
+Second Output
+<img width="705" height="738" alt="Screenshot 2026-05-02 at 12 29 46 PM" src="https://github.com/user-attachments/assets/b6fd934d-8639-4364-a72d-bdbe88277006" />
 
 A backend project built for vehicle maintenance scheduling and notification management.
 
