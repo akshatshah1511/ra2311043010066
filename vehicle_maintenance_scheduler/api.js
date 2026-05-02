@@ -1,19 +1,24 @@
+require("dotenv").config({ path: require('path').resolve(__dirname, '../.env') });
 const axios = require("axios");
 
-const BASE_URL = "http://20.207.122.201/evaluation-service";
-
 const headers = {
-    Authorization: `Bearer YOUR_TOKEN`
+  Authorization: `Bearer ${process.env.TOKEN}`
 };
 
 const getDepots = async () => {
-    const res = await axios.get(`${BASE_URL}/departments`, { headers });
-    return res.data;
+  const res = await axios.get(
+    `${process.env.BASE_URL}/depots`,
+    { headers, timeout: 5000 }
+  );
+  return res.data;
 };
 
 const getVehicles = async () => {
-    const res = await axios.get(`${BASE_URL}/vehicles`, { headers });
-    return res.data;
+  const res = await axios.get(
+    `${process.env.BASE_URL}/vehicles`,
+    { headers, timeout: 5000 }
+  );
+  return res.data;
 };
 
 module.exports = { getDepots, getVehicles };

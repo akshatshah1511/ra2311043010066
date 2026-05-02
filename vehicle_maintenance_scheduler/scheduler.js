@@ -25,30 +25,31 @@ const knapsack = (tasks, maxHours) => {
 
 const runScheduler = async () => {
     try {
-        await log("backend", "info", "cron_job", "Fetching depots");
+        await log("backend", "info", "cron_job", "Fetching depots and vehicles");
 
         const depots = await getDepots();
         const vehicles = await getVehicles();
 
-        await log("backend", "info", "cron_job", "Data fetched");
+        await log("backend", "info", "cron_job", "Data fetched successfully");
 
         depots.depots.forEach((depot) => {
-            const maxHours = depot.mechanicHours;
+            const maxHours = depot.MechanicHours;
 
             const tasks = vehicles.vehicles.map(v => ({
-                duration: v.duration,
-                impact: v.impact
+                duration: v.Duration,
+                impact: v.Impact
             }));
 
             const result = knapsack(tasks, maxHours);
 
-            console.log(`Depot ${depot.id} → Max Impact:`, result);
+            console.log(`Depot ${depot.ID} → Max Impact:`, result);
         });
 
         await log("backend", "info", "domain", "Scheduler completed");
 
     } catch (err) {
-        await log("backend", "error", "domain", "Scheduler failed");
+        console.error("Scheduler caught an error:", err.message);
+        await log("backend", "error", "domain", "Scheduler run failed");
     }
 };
 
