@@ -1,19 +1,12 @@
 const log = require("../logging_middleware/logger");
+const { getDepots, getVehicles } = require("./api");
 
-const schedule = async () => {
-    const vehicles = [
-        { duration: 2, impact: 5 },
-        { duration: 3, impact: 8 },
-        { duration: 1, impact: 4 }
-    ];
-
-    const maxHours = 5;
-
-    let n = vehicles.length;
+const knapsack = (tasks, maxHours) => {
+    let n = tasks.length;
     let dp = Array(n + 1).fill().map(() => Array(maxHours + 1).fill(0));
 
     for (let i = 1; i <= n; i++) {
-        let { duration, impact } = vehicles[i - 1];
+        let { duration, impact } = tasks[i - 1];
 
         for (let w = 0; w <= maxHours; w++) {
             if (duration <= w) {
@@ -27,9 +20,36 @@ const schedule = async () => {
         }
     }
 
-    await log("backend", "info", "domain", "Scheduler executed");
-
-    console.log("Max Impact:", dp[n][maxHours]);
+    return dp[n][maxHours];
 };
 
-schedule();
+const runScheduler = async () => {
+    try {
+        await log("backend", "info", "cron_job", "Fetching depots");
+
+        const depots = await getDepots();
+        const vehicles = await getVehicles();
+
+        await log("backend", "info", "cron_job", "Data fetched");
+
+        depots.depots.forEach((depot) => {
+            const maxHours = depot.mechanicHours;
+
+            const tasks = vehicles.vehicles.map(v => ({
+                duration: v.duration,
+                impact: v.impact
+            }));
+
+            const result = knapsack(tasks, maxHours);
+
+            console.log(`Depot ${depot.id} → Max Impact:`, result);
+        });
+
+        await log("backend", "info", "domain", "Scheduler completed");
+
+    } catch (err) {
+        await log("backend", "error", "domain", "Scheduler failed");
+    }
+};
+
+runScheduler();
